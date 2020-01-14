@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        //noinspection OldTargetApi
+        targetSdkVersion 28
+        versionCode 367
+        versionName "3.6.7"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+//    task makeJar(type: Copy) {
+//        //删除存在的
+//        delete 'build/libs/myjar.jar'
+//        //设置拷贝的文件
+//        from('build/intermediates/bundles/debug/')
+//        //打进jar包后的文件目录
+//        into('build/libs/')
+//        //将classes.jar放入build/libs/目录下
+//        //include ,exclude参数来设置过滤
+//        //（我们只关心classes.jar这个文件）
+//        include('classes.jar')
+//        //重命名
+//        rename ('classes.jar', 'myjar.jar')
+//    }
+
+
+}
+
+//生成jar包
+
+task makeJar(type: Copy) {
+
+    delete 'build/libs/calendarview.jar'
+
+    from('build/intermediates/packaged-classes/release/') //jar文件来源
+
+    into('build/libs/') //生成路径
+
+    include('classes.jar')
+
+    rename('classes.jar', 'calendarview.jar') //命名为network.jar
+
+}
+
+makeJar.dependsOn(build)
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    //noinspection GradleDependency
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    //noinspection GradleDependency
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    testImplementation 'junit:junit:4.12'
+}
